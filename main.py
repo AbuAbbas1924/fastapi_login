@@ -30,10 +30,6 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
-# @app.on_event("startup")
-# async def startup_event():
-#     await init_db()
-
 
 @app.get("/test-db")
 async def test_db():
