@@ -11,11 +11,10 @@ run_db(){
 
     docker run \
         --rm \
+        -d \
         --network $NETWORK \
         -p 5432:5432 \
-        -e POSTGRES_USER=postgres \
-        -e POSTGRES_PASSWORD=postgres \
-        -e POSTGRES_DB=postgres \
+        --env-file .env \
         -v test-pg:/var/lib/postgresql \
         --name test_postgres \
         postgres:19rc1-alpine
@@ -29,6 +28,7 @@ run_dev(){
     init_network;
     docker run \
         --rm \
+        --env-file .env \
         --network $NETWORK \
         -p 8000:8000 \
         -v "${PWD}":/app \
@@ -40,6 +40,7 @@ run_dev(){
 run_dev2(){
     init_network;
     docker run \
+        --env-file .env \
         --rm \
         --network $NETWORK \
         -p 8000:8000 \

@@ -13,3 +13,8 @@ dependencies = [
     "sqlalchemy[asyncio]>=2.1.9",
     "sqlmodel>=0.0.50",
 ]
+
+[dependency-groups]
+dev = [
+    "dotenv>=0.9.9",
+]
