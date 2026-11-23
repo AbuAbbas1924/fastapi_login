@@ -1,8 +1,10 @@
 import logging
 import os
 from contextlib import asynccontextmanager
+from functools import lru_cache
 
 from fastapi import FastAPI, HTTPException
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import create_async_engine
@@ -10,6 +12,20 @@ from sqlmodel import Field, SQLModel
 
 logger = logging.getLogger(__name__)
 
+class Settings(BaseSettings):
+    new_name: str = Field("no name available", validation_alias="new-name")
+    database_url: str
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
+
+@lru_cache()
+def get_settings():
+    return Settings()
 
 class User(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
@@ -17,9 +33,7 @@ class User(SQLModel, table=True):
     password: str
 
 
-engine = create_async_engine(
-    "postgresql+asyncpg://postgres:postgres@test_postgres:5432/postgres"
-)
+engine = create_async_engine(get_settings().database_url, echo=True, future=True)
 
 
 async def init_db():
@@ -43,7 +57,10 @@ app = FastAPI(lifespan=lifespan)
 
 @app.get("/env")
 async def env():
-    return {"name": os.getenv("NAME", "no-name")}
+    return {
+        "pydantic name": get_settings().new_name,
+        "os name": os.getenv("new-NAME", "no name available"),
+    }
 
 @app.get("/test-db")
 async def test_db():

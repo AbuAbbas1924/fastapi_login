@@ -36,19 +36,4 @@ run_dev(){
         pdb
 }
         # -e WATCHFILES_FORCE_POLLING=true \
-
-run_dev2(){
-    init_network;
-    docker run \
-        --env-file .env \
-        --rm \
-        --network $NETWORK \
-        -p 8000:8000 \
-        -v "${PWD}":/app \
-        -v pdb-venv:/opt/venv \
-        --name run_dev \
-        pdb \
-        sh -c "uv sync --locked --no-install-project && fastapi dev --host 0.0.0.0 --port 8000"
-}
-
 $@

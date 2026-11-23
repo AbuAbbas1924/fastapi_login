@@ -803,6 +803,7 @@ dependencies = [
     { name = "asyncpg" },
     { name = "fastapi", extra = ["standard"] },
     { name = "jwt" },
+    { name = "pydantic-settings" },
     { name = "pyjwt" },
     { name = "sqlalchemy", extra = ["asyncio"] },
     { name = "sqlmodel" },
@@ -811,6 +812,7 @@ dependencies = [
 [package.dev-dependencies]
 dev = [
     { name = "dotenv" },
+    { name = "pydantic-settings" },
 ]
 
 [package.metadata]
@@ -819,13 +821,17 @@ requires-dist = [
     { name = "asyncpg", specifier = ">=0.32.0" },
     { name = "fastapi", extras = ["standard"], specifier = ">=0.162.5" },
     { name = "jwt", specifier = ">=1.4.0" },
+    { name = "pydantic-settings", specifier = ">=2.16.3" },
     { name = "pyjwt", specifier = ">=2.15.1" },
     { name = "sqlalchemy", extras = ["asyncio"], specifier = ">=2.1.9" },
     { name = "sqlmodel", specifier = ">=0.0.50" },
 ]
 
 [package.metadata.requires-dev]
-dev = [{ name = "dotenv", specifier = ">=0.9.9" }]
+dev = [
+    { name = "dotenv", specifier = ">=0.9.9" },
+    { name = "pydantic-settings", specifier = ">=2.16.3" },
+]
 
 [[package]]
 name = "protobuf"
