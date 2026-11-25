@@ -8,11 +8,13 @@ COPY pyproject.toml uv.lock ./
 RUN --mount=type=cache,target=/root/.cache/uv uv sync --locked --no-dev --no-install-project
 COPY . .
 CMD ["fastapi", "dev", "--host", "0.0.0.0", "--port", "8000"]
+# CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
 
 FROM base AS prod_dep
 COPY pyproject.toml uv.lock ./
 RUN --mount=type=cache,target=/root/.cache/uv uv sync --locked --no-dev --no-install-project
 
-FROM prod_def AS prod
+FROM prod_dep AS prod
 COPY . .
-CMD ["fastapi", "dev", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["fastapi", "run", "--host", "0.0.0.0", "--port", "8000"]
+# CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]

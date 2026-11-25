@@ -6,7 +6,7 @@ init_network(){
     docker network inspect "$NETWORK" >/dev/null 2>&1 || docker network create $NETWORK
 }
 
-run_db(){
+db(){
     init_network;
 
     docker run \
@@ -21,10 +21,10 @@ run_db(){
 }
 
 build_dev(){
-    docker build -t pdb --target dev .
+    docker build -t pdb:dev --target dev .
 }
 
-run_dev(){
+dev(){
     init_network;
     docker run \
         --rm \
@@ -33,7 +33,22 @@ run_dev(){
         -p 8000:8000 \
         -v "${PWD}":/app \
         --name run_dev \
-        pdb
+        pdb:dev
 }
-        # -e WATCHFILES_FORCE_POLLING=true \
+
+build_prod(){
+    docker build -t pdb:prod --target prod .
+}
+
+prod(){
+    init_network;
+    docker run \
+        --rm \
+        --env-file .env \
+        --network $NETWORK \
+        -p 8000:8000 \
+        --name run_prod \
+        pdb:prod
+}
+
 $@
